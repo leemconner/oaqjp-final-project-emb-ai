@@ -1,6 +1,34 @@
 import requests
 import json
 
+def emotion_detector(text_to_analyse):
+    url = 'https://sn-watson-emotion.labs.skills.network/v1/watson.runtime.nlp.v1/NlpService/EmotionPredict'
+    headers = {"grpc-metadata-mm-model-id": "emotion_aggregated-workflow_lang_en_stock"}
+    myobj = { "raw_document": { "text": text_to_analyse } }
+
+    try:
+        response = requests.post(url, json=myobj, headers=headers)
+        response.raise_for_status()
+        formatted_response = json.loads(response.text)
+
+        if response.status_code == 200:
+            return formatted_response
+
+        elif response.status_code == 400:
+            status400 = None
+            return status400
+
+    except requests.exceptions.RequestException as e:
+        if response.status_code == 400:
+            return json.dumps({"Invalid text! Please try again": 400,
+                "data": None,
+                "error": None
+            }, indent=4)
+
+"""Should be a combination of the above and below code"""
+import requests
+import json
+
 import requests
 import json
 
